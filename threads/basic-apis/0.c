@@ -9,6 +9,8 @@ void *worker(void *arg) {
 }
 
 int main(void) {
-  pthread_t *th;
+  pthread_t *th = malloc(sizeof(*th));
   pthread_create(th, NULL, worker, NULL);
+  printf("main thread\n");
+  return 0;
 }
