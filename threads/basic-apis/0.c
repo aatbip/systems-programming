@@ -6,6 +6,7 @@
 void *worker(void *arg) {
   printf("worker thread\n");
   int *i = malloc(sizeof(*i));
+  *i = 77;
   return i;
 }
 
@@ -18,11 +19,12 @@ int main(void) {
   if (ret != 0) {
     printf("err: %s\n", strerror(ret));
   }
+  int *i;
   /*pthread_join waits for the thread with `th` thread id to return before continuing. It blocks the
    * caller thread (main in this case) until the worker thread returns. It also cleans up the resources
    * such as the stack (thread local storage), thread file descriptors, and others. It also gives
    * access to the return value of the `worker`.*/
-  pthread_join(*th, NULL);
-  printf("main thread\n");
+  pthread_join(*th, (void **)&i);
+  printf("main thread. Return val: %d\n", *i);
   return 0;
 }
