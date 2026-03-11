@@ -19,6 +19,7 @@ void *worker(void *arg) {
 int main(void) {
   pthread_t *th = malloc(sizeof(*th));
   int ret = pthread_create(th, NULL, worker, NULL);
+  /*pthread_t is of type unsigned long in Linux and it stores the thread id.*/
   printf("thread id: %ld\n", *th);
   if (ret != 0) {
     printf("err: %s\n", strerror(ret));
