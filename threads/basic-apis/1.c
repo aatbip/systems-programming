@@ -7,7 +7,7 @@
 #include <string.h>
 
 void *worker(void *arg) {
-  printf("worker thread\n");
+  printf("worker thread: %ld\n", pthread_self());
   int *i = malloc(sizeof(*i));
   *i = 77;
   /*Thread can be terminated using pthread_exit. `retval` can be passed as argument that can be
@@ -19,6 +19,7 @@ void *worker(void *arg) {
 int main(void) {
   pthread_t *th = malloc(sizeof(*th));
   int ret = pthread_create(th, NULL, worker, NULL);
+  printf("thread id: %ld\n", *th);
   if (ret != 0) {
     printf("err: %s\n", strerror(ret));
   }
