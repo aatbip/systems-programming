@@ -1,3 +1,9 @@
+/*In this program:
+ * - Creating thread using pthread_create
+ * - Waiting for worker thread to return using pthread_join
+ * - Catching error from pthread functions
+ **/
+
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
