@@ -1,4 +1,7 @@
 /*In this program:
+ * - Working with thread ids
+ * - Terminating the thread using thread_exit
+ * - Detaching the thread using pthread_detach
  **/
 
 #include <pthread.h>
