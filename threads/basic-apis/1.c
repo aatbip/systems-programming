@@ -24,8 +24,15 @@ int main(void) {
   if (ret != 0) {
     printf("err: %s\n", strerror(ret));
   }
-  int *i;
-  pthread_join(*th, (void **)&i);
-  printf("main thread, ret val: %d\n", *i);
+  // int *i;
+  // pthread_join(*th, (void **)&i);
+  // printf("main thread, ret val: %d\n", *i);
+
+  /*pthread_detach detaches the worker thread from caller thread. It means, caller thread doesn't wait for it
+   * to terminate. The worker thread will auto clean itself. We can use pthread_exit in the main thread to
+   * terminate the main thread but still keep the process alive so that worker thread will still keep on
+   * running.*/
+  pthread_detach(*th);
+  pthread_exit(NULL);
   return 0;
 }
