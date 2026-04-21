@@ -15,10 +15,17 @@ int main(void) {
   printf("syscalls: %d\n", i);
   free(buf);
 
-  char input[16];
-  if (read(STDIN_FILENO, input, 16) == -1) {
-    perror("read");
-  }
-  printf("input: %s\n", input);
+  // char input[16];
+  // if (read(STDIN_FILENO, input, 16) == -1) {
+  //   perror("read");
+  // }
+  // printf("input: %s\n", input);
+
+  off_t cur = lseek(i_fd, 5, SEEK_SET);
+  printf("cur: %ld\n", cur);
+  char buf1[16];
+  read(i_fd, buf1, 16);
+  write(STDOUT_FILENO, buf1, 16);
+
   return 0;
 }
