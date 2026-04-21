@@ -4,7 +4,7 @@
 #include <unistd.h>
 
 int main(void) {
-  int i_fd = open("./test", O_RDONLY);
+  int i_fd = open("./test", O_RDWR);
   int o_fd = open("./result", O_CREAT | O_RDWR, 0700);
   char *buf = malloc(2);
   int i = 0;
@@ -21,11 +21,13 @@ int main(void) {
   // }
   // printf("input: %s\n", input);
 
-  off_t cur = lseek(i_fd, 5, SEEK_SET);
-  printf("cur: %ld\n", cur);
-  char buf1[16];
-  read(i_fd, buf1, 16);
-  write(STDOUT_FILENO, buf1, 16);
+  off_t cur = lseek(i_fd, 2, SEEK_END);
+  write(i_fd, "hey you", 7);
+  off_t cur1 = lseek(i_fd, 0, SEEK_SET);
+  char buf1[32];
+  read(i_fd, buf1, 32);
+  printf("cur1: %ld\n", cur1);
+  printf("buf1: %s\n", buf1);
 
   return 0;
 }
