@@ -1,3 +1,5 @@
+/*All files in this directory deals with general basic concepts.*/
+
 #include <asm-generic/errno-base.h>
 #include <asm-generic/errno.h>
 #include <errno.h>
