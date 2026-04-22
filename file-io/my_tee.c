@@ -1,3 +1,5 @@
+/*This program implements the tee program in its simplest form.*/
+
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
