@@ -18,13 +18,14 @@ int main(int argc, char **argv) {
   strcpy(dest, "./");
   strcat(dest, file_name);
   int fd;
-  if ((fd = open(dest, O_CREAT | O_WRONLY, 0700)) == -1) {
+  if ((fd = open(dest, O_CREAT | O_WRONLY | O_APPEND, 0700)) == -1) {
     perror("open");
     exit(EXIT_FAILURE);
   }
-  char *in_buf;
-  while (read(STDIN_FILENO, in_buf, 1024) > 0) {
-    if (write(fd, in_buf, 1024) == -1 || write(STDOUT_FILENO, in_buf, 1024)) {
+  char in_buf[1024];
+  int read_count;
+  while ((read_count = read(STDIN_FILENO, in_buf, 1024)) > 0) {
+    if (write(fd, in_buf, read_count) == -1 || write(STDOUT_FILENO, in_buf, read_count) == -1) {
       perror("write");
       exit(EXIT_FAILURE);
     }
