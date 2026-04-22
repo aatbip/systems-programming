@@ -11,14 +11,15 @@ void err_exit(char *err_txt) {
 
 int main(int argc, char **argv) {
   if (argc < 2) {
-    err_exit("Missing arg");
+    err_exit("my_tee: Missing arg\n");
   }
-  char *file_name = argv[1];
+  int op;
+  op = getopt(argc, argv, "a");
+  char *file_name = argv[optind > 2 ? 1 : optind];
   char *dest = malloc(strlen(file_name) + 3);
-  strcpy(dest, "./");
-  strcat(dest, file_name);
+  strcat(strcpy(dest, "./"), file_name);
   int fd;
-  if ((fd = open(dest, O_CREAT | O_WRONLY | O_APPEND, 0700)) == -1) {
+  if ((fd = open(dest, O_CREAT | O_WRONLY | (op == -1 ? O_TRUNC : O_APPEND), 0700)) == -1) {
     perror("open");
     exit(EXIT_FAILURE);
   }
