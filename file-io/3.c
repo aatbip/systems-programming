@@ -6,14 +6,14 @@
 
 int main(int argc, char **argv) {
   int fd;
-  if ((fd = open("test", O_CREAT | O_RDWR, 0700)) == -1) {
+  if ((fd = open("test", O_CREAT | O_RDWR | O_APPEND, 0700)) == -1) {
     perror("open");
     exit(EXIT_FAILURE);
   }
-  if (lseek(fd, 0, SEEK_END) == -1) {
-    perror(("lseek"));
-    exit(EXIT_FAILURE);
-  }
+  // if (lseek(fd, 0, SEEK_END) == -1) {
+  //   perror(("lseek"));
+  //   exit(EXIT_FAILURE);
+  // }
   if (argc > 2) {
     printf("sleeping...\n");
     sleep(20);
