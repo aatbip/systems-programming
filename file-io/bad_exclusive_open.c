@@ -1,3 +1,7 @@
+/*This program contains a race condition bug. When two processes run this program simultaneously then even though only
+ * one process actually creates the file but the other process also thinks that it has opened the file. We can instead
+ * use O_EXCL that ensures atomicity for checking the file existence and creating only if it doesn't exist.*/
+
 #include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
