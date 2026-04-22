@@ -29,5 +29,10 @@ int main(void) {
   printf("cur1: %ld\n", cur1);
   printf("buf1: %s\n", buf1);
 
+  char *buf2 = malloc(4);
+  read(STDIN_FILENO, buf2, 12);
+  printf("buf2: %s\n", buf2);
+  free(buf2);
+
   return 0;
 }
