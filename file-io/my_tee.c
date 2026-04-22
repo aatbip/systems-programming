@@ -20,5 +20,14 @@ int main(int argc, char **argv) {
   int fd;
   if ((fd = open(dest, O_CREAT | O_WRONLY, 0700)) == -1) {
     perror("open");
+    exit(EXIT_FAILURE);
   }
+  char *in_buf;
+  while (read(STDIN_FILENO, in_buf, 1024) > 0) {
+    if (write(fd, in_buf, 1024) == -1 || write(STDOUT_FILENO, in_buf, 1024)) {
+      perror("write");
+      exit(EXIT_FAILURE);
+    }
+  }
+  exit(EXIT_SUCCESS);
 }
