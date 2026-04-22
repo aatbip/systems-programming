@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
   int op;
   op = getopt(argc, argv, "a");
   char *file_name = argv[optind > 2 ? 1 : optind];
-  char *dest = malloc(strlen(file_name) + 3);
+  char dest[strlen(file_name) + 3];
   strcat(strcpy(dest, "./"), file_name);
   int fd;
   if ((fd = open(dest, O_CREAT | O_WRONLY | (op == -1 ? O_TRUNC : O_APPEND), 0700)) == -1) {
