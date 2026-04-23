@@ -1,3 +1,7 @@
+/*This program demonstrate the atomicity kernel guarantees when used O_APPEND flag. Kernel performs the seek and write
+ * operation within a lock that will prevent race condition that would be seen without using O_APPEND and using lseek
+ * manually which if ran by multiprocess/multithread would overwrite the written data.*/
+
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
