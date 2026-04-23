@@ -21,5 +21,6 @@ int main(int argc, char **argv) {
     }
     printf("[PID: %d] Created the file \"%s\"\n", getpid(), argv[1]);
   }
+  close(fd);
   return 0;
 }

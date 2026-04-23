@@ -27,5 +27,6 @@ int main(int argc, char **argv) {
     write(STDERR_FILENO, err, strlen(err));
     exit(EXIT_FAILURE);
   }
+  close(fd);
   exit(EXIT_SUCCESS);
 }
