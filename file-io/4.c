@@ -31,9 +31,7 @@ int main(int argc, char *argv[]) {
   printf("fd1: %d\n", fd1);
   printf("fd2: %d\n", fd2);
 
-  lseek(fd1, 0, SEEK_SET);
-  lseek(fd2, 0, SEEK_SET);
-  if ((read(fd1, fd1_in, 9)) == -1 || (read(fd2, fd2_in, 9)) == -1) {
+  if ((pread(fd1, fd1_in, 9, 0)) == -1 || (pread(fd2, fd2_in, 9, 0)) == -1) {
     perror("read");
   }
   if ((write(STDOUT_FILENO, fd1_in, 9)) == -1 || (write(STDOUT_FILENO, fd2_in, 9)) == -1) {
