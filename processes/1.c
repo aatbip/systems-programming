@@ -18,9 +18,13 @@ int main(int argc, char **argv) {
   char buf[64];
   setenv("SHELL", getcwd(buf, sizeof(buf)), 1);
   printf("DEMO: %s\n", getenv("DEMO"));
-  extern char **environ;
-  for (char **p = environ; *p != NULL; p++) {
-    puts(*p);
+  // extern char **environ;
+  // for (char **p = environ; *p != NULL; p++) {
+  //   puts(*p);
+  // }
+  if (setenv("DEMO1", "milo", 1) == -1) {
+    perror("setenv");
   }
+  sleep(40);
   return 0;
 }
