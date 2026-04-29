@@ -7,22 +7,23 @@ int main(int argc, char *argv[]) {
   int val = 11;
   pid = fork();
 
-  switch (pid = fork()) {
-  case -1:
-    perror("fork");
-    exit(EXIT_FAILURE);
-    break;
-
-    /*Child process*/
-  case 0:
-    val = 22;
-    break;
-
-  default:
-    break;
-  }
+  // switch (pid = fork()) {
+  // case -1:
+  //   perror("fork");
+  //   exit(EXIT_FAILURE);
+  //   break;
+  //
+  //   /*Child process*/
+  // case 0:
+  //   val = 22;
+  //   break;
+  //
+  // default:
+  //   break;
+  // }
 
   /*Both parent and child*/
+  val = pid == 0 ? 22 : 33;
   int i = 0;
   while (i < 10) {
     printf("%s: %d\n", pid == 0 ? "child" : "parent", val);
