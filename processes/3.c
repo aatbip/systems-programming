@@ -14,11 +14,13 @@ int main(int argc, char *argv[]) {
 
   case 0:
     lseek(fd1, 100, SEEK_SET);
+    printf("child: %ld\n", lseek(fd1, 0, SEEK_CUR));
+    close(fd2);
     break;
 
   default:
     wait(NULL);
-    printf("%ld\n", lseek(fd1, 0, SEEK_CUR));
+    printf("parent: %ld\n", lseek(fd2, 0, SEEK_CUR));
     break;
   }
   return 0;
