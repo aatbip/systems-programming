@@ -1,40 +1,25 @@
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 int main(int argc, char *argv[]) {
-  pid_t pid;
-  int val = 11;
-  pid = fork();
-  int *n = malloc(sizeof(int));
-  *n = 11;
+  int fd1 = open("file1", O_CREAT | O_RDWR, 0700);
+  int fd2 = open("file2", O_CREAT | O_RDWR, 0700);
+  switch (fork()) {
+  case -1:
+    exit(EXIT_FAILURE);
+    break;
 
-  // switch (pid = fork()) {
-  // case -1:
-  //   perror("fork");
-  //   exit(EXIT_FAILURE);
-  //   break;
-  //
-  //   /*Child process*/
-  // case 0:
-  //   val = 22;
-  //   break;
-  //
-  // default:
-  //   break;
-  // }
+  case 0:
+    lseek(fd1, 100, SEEK_SET);
+    break;
 
-  /*Both parent and child*/
-  *n = pid == 0 ? 22 : 33;
-  int i = 0;
-  while (i < 10) {
-    printf("%s: %d\n", pid == 0 ? "child" : "parent", *n);
-    if (pid != 0) {
-      sleep(2);
-    } else {
-      sleep(1);
-    }
-    i++;
+  default:
+    wait(NULL);
+    printf("%ld\n", lseek(fd1, 0, SEEK_CUR));
+    break;
   }
   return 0;
 }
