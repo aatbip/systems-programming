@@ -23,5 +23,6 @@ int main(int argc, char *argv[]) {
     printf("parent: %ld\n", lseek(fd2, 0, SEEK_CUR));
     break;
   }
+  vfork();
   return 0;
 }
