@@ -6,6 +6,8 @@ int main(int argc, char *argv[]) {
   pid_t pid;
   int val = 11;
   pid = fork();
+  int *n = malloc(sizeof(int));
+  *n = 11;
 
   // switch (pid = fork()) {
   // case -1:
@@ -23,10 +25,10 @@ int main(int argc, char *argv[]) {
   // }
 
   /*Both parent and child*/
-  val = pid == 0 ? 22 : 33;
+  *n = pid == 0 ? 22 : 33;
   int i = 0;
   while (i < 10) {
-    printf("%s: %d\n", pid == 0 ? "child" : "parent", val);
+    printf("%s: %d\n", pid == 0 ? "child" : "parent", *n);
     if (pid != 0) {
       sleep(2);
     } else {
