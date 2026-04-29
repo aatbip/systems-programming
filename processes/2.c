@@ -5,6 +5,7 @@
 jmp_buf env;
 
 int x(char *a) {
+  printf("here\n");
   longjmp(env, atoi(a));
   printf("i should not run...\n");
   return 0;
