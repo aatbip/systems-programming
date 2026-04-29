@@ -3,6 +3,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 int main(void) {
+  int status;
   switch (fork()) {
   case -1:
     exit(EXIT_FAILURE);
@@ -10,11 +11,13 @@ int main(void) {
     printf("child running\n");
     sleep(1);
     printf("child complete\n");
+    _exit(1);
     break;
 
   default:
     printf("parent running\n");
-    // wait(NULL);
+    wait(&status);
+    printf("child status: %d\n", status);
     break;
   }
   return 0;
