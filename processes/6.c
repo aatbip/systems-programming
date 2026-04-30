@@ -9,7 +9,8 @@ int main(void) {
   switch (pid) {
   case 0:
     printf("child\n");
-    return 3;
+    exit(3);
+    break;
 
   default:
     wait(&ret);
