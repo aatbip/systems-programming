@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
 int main(int argc, char *argv[]) {
   printf("Hello world\n");
@@ -9,6 +10,14 @@ int main(int argc, char *argv[]) {
   pid_t pid;
   if ((pid = fork()) == -1) {
     exit(EXIT_FAILURE);
+  }
+  if (pid == 0) {
+    exit(1);
+  }
+  if (pid > 0) {
+    int status;
+    wait(&status);
+    printf("status: %d\n", status >> 8);
   }
   exit(EXIT_SUCCESS);
 }
