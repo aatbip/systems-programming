@@ -5,11 +5,10 @@
 int main(int argc, char *argv[]) {
   printf("Hello world\n");
   write(STDOUT_FILENO, "Ciao\n", 5);
+  fflush(stdout);
   pid_t pid;
   if ((pid = fork()) == -1) {
     exit(EXIT_FAILURE);
   }
-  if (pid == 0)
-    _exit(EXIT_SUCCESS);
   exit(EXIT_SUCCESS);
 }
