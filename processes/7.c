@@ -9,5 +9,7 @@ int main(int argc, char *argv[]) {
   if ((pid = fork()) == -1) {
     exit(EXIT_FAILURE);
   }
+  if (pid == 0)
+    _exit(EXIT_SUCCESS);
   exit(EXIT_SUCCESS);
 }
