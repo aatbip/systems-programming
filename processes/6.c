@@ -3,19 +3,26 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
+
+void efunc(void) {
+  printf("[%d]", getpid());
+  printf("i am exit handler\n");
+}
+
 int main(void) {
   pid_t pid = fork();
   int ret;
   switch (pid) {
   case 0:
-    printf("child\n");
-    exit(3);
+    printf("[%d] child\n", getpid());
+    atexit(efunc);
     break;
 
   default:
     wait(&ret);
+    printf("parent [%d]: %d\n", getpid(), ret >> 8);
+    atexit(efunc);
     break;
   }
-  printf("parent: %d\n", ret >> 8);
-  return 0;
+  // exit(EXIT_SUCCESS);
 }
