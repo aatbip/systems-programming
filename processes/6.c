@@ -15,14 +15,14 @@ int main(void) {
   switch (pid) {
   case 0:
     printf("[%d] child\n", getpid());
-    atexit(efunc);
+    exit(2);
     break;
 
   default:
     wait(&ret);
-    printf("parent [%d]: %d\n", getpid(), ret >> 8);
     atexit(efunc);
     break;
   }
-  // exit(EXIT_SUCCESS);
+  printf("parent [%d]: %d\n", getpid(), ret >> 8);
+  exit(EXIT_SUCCESS);
 }
