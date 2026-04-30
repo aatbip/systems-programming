@@ -5,7 +5,7 @@
 int main(int argc, char *argv[]) {
   printf("Hello world\n");
   write(STDOUT_FILENO, "Ciao\n", 5);
-  fflush(stdout);
+  setbuf(stdout, NULL);
   pid_t pid;
   if ((pid = fork()) == -1) {
     exit(EXIT_FAILURE);
