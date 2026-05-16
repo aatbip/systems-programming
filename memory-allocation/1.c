@@ -1,3 +1,4 @@
+#include <malloc.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,10 +18,21 @@ int main() {
   void *c = sbrk(0);
   printf("c: %p\n", c);
   printf("diff: %ld kb\n", (c - b) / 1024);
+  free(r);
+  void *d = sbrk(0);
+  printf("d: %p\n", d);
+  printf("diff: %ld kb\n", (d - a) / 1024);
+
+  extern char end;
+  void *e = &end;
+  printf("tot: %ld kb\n", (d - e) / 1024);
 
   // void *d = sbrk(0);
   // printf("d: %p\n", d);
   // printf("diff: %ld kb\n", (d - c) / 1024);
 
+  printf("pid: %d\n", getpid());
+  while (1) {
+  }
   return 0;
 }
