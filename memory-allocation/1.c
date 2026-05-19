@@ -4,7 +4,14 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+struct t {
+  int a;
+  char b;
+} __attribute__((packed));
+
 int main() {
+  printf("sizeof t: %zu\n", sizeof(struct t));
+
   void *a = sbrk(0);
   printf("a: %p\n", a);
 
