@@ -19,8 +19,10 @@ int foo(jmp_buf *buf) {
 int main(void) {
   struct t *p = malloc(sizeof(struct t));
   jmp_buf buf;
-  long f = setjmp(buf);
-  struct t *res = ((struct t *)f);
+  // heap address is 48bits but int f only stores lower 32 bits which points to
+  // invalid memory address resulting in segfault
+  int f = setjmp(buf);
+  struct t *res = ((struct t *)(ptrdiff_t)f);
   if (f == 0) {
     foo(&buf);
   }
