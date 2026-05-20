@@ -15,12 +15,20 @@ void *al(long incr) {
   return cb;
 }
 
+void *dec(long decr) {
+  void *cb = (void *)syscall(SYS_brk, 0);
+  if (brk(cb - decr) == -1) {
+    errno = EINVAL;
+    return NULL;
+  }
+  return cb;
+}
+
 int main(void) {
   void *cb0 = (void *)syscall(SYS_brk, 0);
   void *p;
   if ((p = al(1024)) == NULL) {
     perror("err");
   }
-
   return 0;
 }
