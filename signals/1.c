@@ -10,8 +10,14 @@ void newHandler(int sig) {
   printf("\nhey %d\n", sig);
 };
 
+typedef void (*hd_t)(int);
+
+extern void original_handler(int n) {}
+
+hd_t test(int n, hd_t new_hd) {}
+
 int main(void) {
-  oldHandler = signal(SIGINT, newHandler);
+  oldHandler = signal(SIGHUP, newHandler);
 
   if (oldHandler == SIG_ERR) {
     perror("signal");
