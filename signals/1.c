@@ -21,7 +21,7 @@ hd_t test(int n, hd_t new_hd) {
 }
 
 int main(void) {
-  oldHandler = signal(SIGHUP, newHandler);
+  oldHandler = signal(SIGINT, newHandler);
   sig_t s; // sighandler_t type alias
 
   if (oldHandler == SIG_ERR) {
@@ -32,11 +32,12 @@ int main(void) {
   sleep(2);
   printf("do something...\n");
 
-  if (signal(SIGINT, oldHandler) == SIG_ERR) {
+  if (signal(SIGINT, newHandler) == SIG_ERR) {
     perror("signal 1");
     exit(EXIT_FAILURE);
   }
-  sleep(2);
+  while (1)
+    ;
 
   exit(EXIT_SUCCESS);
 }
