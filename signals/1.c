@@ -32,7 +32,7 @@ int main(void) {
   sleep(2);
   printf("do something...\n");
 
-  if (signal(SIGINT, newHandler) == SIG_ERR) {
+  if (signal(SIGINT, SIG_IGN) == SIG_ERR) {
     perror("signal 1");
     exit(EXIT_FAILURE);
   }
