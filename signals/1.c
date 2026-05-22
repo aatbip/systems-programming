@@ -14,10 +14,15 @@ typedef void (*hd_t)(int);
 
 extern void original_handler(int n) {}
 
-hd_t test(int n, hd_t new_hd) {}
+hd_t test(int n, hd_t new_hd) {
+  // something..
+
+  return original_handler;
+}
 
 int main(void) {
   oldHandler = signal(SIGHUP, newHandler);
+  sig_t s; // sighandler_t type alias
 
   if (oldHandler == SIG_ERR) {
     perror("signal");
