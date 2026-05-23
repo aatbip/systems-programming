@@ -13,8 +13,12 @@ int main(int argc, char *argv[]) {
   sigaddset(&set, 15);
 
   printf("%d\n", sigismember(&set, atoi(argv[1])));
-  sigdelset(&set, 15);
-  printf("%d\n", sigismember(&set, atoi(argv[1])));
+
+  for (int i = 1; i < NSIG; i++) {
+    if (sigismember(&set, i)) {
+      printf("%d %s\n", i, strsignal(i));
+    }
+  }
 
   exit(EXIT_SUCCESS);
 }
