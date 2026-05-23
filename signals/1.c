@@ -1,3 +1,5 @@
+/*Signal disposition- attaching a custom signal handler then updating to default again.*/
+
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
