@@ -1,3 +1,4 @@
+#include <bits/types/sigset_t.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,7 +8,13 @@ int main(int argc, char *argv[]) {
   char *s = strsignal(atoi(argv[1]));
   printf("%s\n", s);
 
-  psignal(atoi(argv[1]), "Didn't work?");
+  sigset_t set;
+  sigaddset(&set, 3);
+  sigaddset(&set, 15);
+
+  printf("%d\n", sigismember(&set, atoi(argv[1])));
+  sigdelset(&set, 15);
+  printf("%d\n", sigismember(&set, atoi(argv[1])));
 
   exit(EXIT_SUCCESS);
 }
