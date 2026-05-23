@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 int main(int argc, char **argv) {
-  if ((kill(atoi(argv[1]), SIGTERM)) == -1) {
+  if ((kill(atoi(argv[1]), atoi(argv[2]))) == -1) {
     perror("kill");
     exit(EXIT_FAILURE);
   }
