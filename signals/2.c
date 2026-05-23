@@ -25,11 +25,12 @@ int main(int argc, char **argv) {
   // new process
   if ((pid = fork() == 0)) {
     signal(SIGTERM, handler);
+    signal(SIGQUIT, handler);
   }
 
   // old process
   if (pid > 0) {
-
+    signal(SIGQUIT, handler);
     for (;;)
       if (kill(pid, atoi(argv[1])) == -1) {
         perror("kill");
