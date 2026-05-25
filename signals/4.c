@@ -10,7 +10,7 @@ void sig_handle(int sig) {
   if (sig == SIGINT) {
     printf("%s triggered.", strsignal(sig));
   }
-  if (sig == SIGTERM) {
+  if (sig == SIGTERM || sig == SIGCHLD) {
     printf("%s triggered.", strsignal(sig));
     exit(EXIT_SUCCESS);
   }
@@ -36,6 +36,11 @@ int main(int argc, char *argv[]) {
 
   // parent process
   default:
+    if (signal(SIGCHLD, sig_handle) == SIG_ERR) {
+      perror("signal disposition");
+      exit(EXIT_FAILURE);
+    }
+
     break;
   }
 }
