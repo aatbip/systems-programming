@@ -25,10 +25,10 @@ void *routine(void *p) {
 
 void sig_handle(int sig) {
   if (sig == SIGTERM) {
-    printf("%s triggered.", strsignal(sig));
+    printf("%s triggered.\n", strsignal(sig));
   }
   if (sig == SIGQUIT || sig == SIGCHLD) {
-    printf("%s triggered.", strsignal(sig));
+    printf("%s triggered.\n", strsignal(sig));
     printf("Exiting [pid] %d\n", getpid());
     exit(EXIT_SUCCESS);
   }
@@ -44,6 +44,7 @@ int main(int argc, char *argv[]) {
   // child process
   case 0:
     printf("Child pid: %d\n", getpid());
+
     if (signal(SIGTERM, sig_handle) == SIG_ERR || signal(SIGQUIT, sig_handle) == SIG_ERR) {
       perror("signal disposition");
       exit(EXIT_FAILURE);
@@ -51,7 +52,6 @@ int main(int argc, char *argv[]) {
     /*Run child process forever until SIGTERM is received.*/
     for (;;)
       ;
-    break;
 
   // parent process
   default:
@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
     for (;;) {
       int sig;
       printf("Enter signal identifier: ");
-      scanf("%d\n", &sig);
+      scanf("%d", &sig);
       sig_handler_param_t *param = malloc(sizeof(sig_handler_param_t));
       param->pid = pid;
       param->sig = sig;
@@ -78,6 +78,5 @@ int main(int argc, char *argv[]) {
         pthread_detach(th[i]);
       }
     }
-    break;
   }
 }
