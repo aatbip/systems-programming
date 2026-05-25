@@ -44,6 +44,9 @@ int main(int argc, char *argv[]) {
     int sig;
     printf("Enter signal identifier: ");
     scanf("%d\n", &sig);
+    if (kill(pid, sig) == -1) {
+      perror("kill");
+    }
 
     break;
   }
