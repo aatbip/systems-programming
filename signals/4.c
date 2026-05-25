@@ -25,6 +25,13 @@ int main(int argc, char *argv[]) {
 
   // child process
   case 0:
+    if (signal(SIGINT, sig_handle) == SIG_ERR || signal(SIGTERM, sig_handle) == SIG_ERR) {
+      perror("signal disposition");
+      exit(EXIT_FAILURE);
+    }
+    /*Run child process forever until SIGTERM is received.*/
+    for (;;)
+      ;
     break;
 
   // parent process
