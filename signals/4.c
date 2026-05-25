@@ -1,10 +1,13 @@
 /*Analyzing what may possibly happen when sending multiple signals to a process concurrently.*/
 
+#include <pthread.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
+#define THREAD_CNT 4
 
 void sig_handle(int sig) {
   if (sig == SIGINT) {
@@ -41,11 +44,20 @@ int main(int argc, char *argv[]) {
       perror("signal disposition");
       exit(EXIT_FAILURE);
     }
-    int sig;
-    printf("Enter signal identifier: ");
-    scanf("%d\n", &sig);
-    if (kill(pid, sig) == -1) {
-      perror("kill");
+
+    pthread_t *th = malloc(sizeof(pthread_t) * THREAD_CNT);
+
+    for (;;) {
+      int sig;
+      printf("Enter signal identifier: ");
+      scanf("%d\n", &sig);
+
+      for (int i = 0; i < THREAD_CNT; i++) {
+        if (pthread_create(&th[i], NULL, NULL, NULL) != 0) {
+          perror("pthread_create");
+        }
+        pthread_detach(th[i]);
+      }
     }
 
     break;
