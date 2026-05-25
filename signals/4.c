@@ -15,6 +15,7 @@ typedef struct sig_handler_param {
 #define THREAD_CNT 4
 
 void *routine(void *p) {
+  printf("Routine running...\n");
   sig_handler_param_t *param = (sig_handler_param_t *)p;
   if (kill(param->pid, param->sig) == -1) {
     perror("kill");
@@ -23,11 +24,12 @@ void *routine(void *p) {
 }
 
 void sig_handle(int sig) {
-  if (sig == SIGINT) {
+  if (sig == SIGTERM) {
     printf("%s triggered.", strsignal(sig));
   }
-  if (sig == SIGTERM || sig == SIGCHLD) {
+  if (sig == SIGQUIT || sig == SIGCHLD) {
     printf("%s triggered.", strsignal(sig));
+    printf("Exiting [pid] %d\n", getpid());
     exit(EXIT_SUCCESS);
   }
 }
@@ -41,7 +43,8 @@ int main(int argc, char *argv[]) {
 
   // child process
   case 0:
-    if (signal(SIGINT, sig_handle) == SIG_ERR || signal(SIGTERM, sig_handle) == SIG_ERR) {
+    printf("Child pid: %d\n", getpid());
+    if (signal(SIGTERM, sig_handle) == SIG_ERR || signal(SIGQUIT, sig_handle) == SIG_ERR) {
       perror("signal disposition");
       exit(EXIT_FAILURE);
     }
@@ -52,6 +55,7 @@ int main(int argc, char *argv[]) {
 
   // parent process
   default:
+    printf("Parent pid: %d\n", getpid());
     /*Register SIGCHLD in parent to terminate parent when child exits*/
     if (signal(SIGCHLD, sig_handle) == SIG_ERR) {
       perror("signal disposition");
@@ -74,7 +78,6 @@ int main(int argc, char *argv[]) {
         pthread_detach(th[i]);
       }
     }
-
     break;
   }
 }
