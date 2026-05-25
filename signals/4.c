@@ -36,10 +36,14 @@ int main(int argc, char *argv[]) {
 
   // parent process
   default:
+    /*Register SIGCHLD in parent to terminate parent when child exits*/
     if (signal(SIGCHLD, sig_handle) == SIG_ERR) {
       perror("signal disposition");
       exit(EXIT_FAILURE);
     }
+    int sig;
+    printf("Enter signal identifier: ");
+    scanf("%d\n", &sig);
 
     break;
   }
