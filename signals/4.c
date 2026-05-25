@@ -7,7 +7,20 @@
 #include <string.h>
 #include <unistd.h>
 
+typedef struct sig_handler_param {
+  pid_t pid;
+  int sig;
+} sig_handler_param_t;
+
 #define THREAD_CNT 4
+
+void *routine(void *p) {
+  sig_handler_param_t *param = (sig_handler_param_t *)p;
+  if (kill(param->pid, param->sig) == -1) {
+    perror("kill");
+  }
+  return NULL;
+}
 
 void sig_handle(int sig) {
   if (sig == SIGINT) {
@@ -51,9 +64,11 @@ int main(int argc, char *argv[]) {
       int sig;
       printf("Enter signal identifier: ");
       scanf("%d\n", &sig);
-
+      sig_handler_param_t *param = malloc(sizeof(sig_handler_param_t));
+      param->pid = pid;
+      param->sig = sig;
       for (int i = 0; i < THREAD_CNT; i++) {
-        if (pthread_create(&th[i], NULL, NULL, NULL) != 0) {
+        if (pthread_create(&th[i], NULL, routine, param) != 0) {
           perror("pthread_create");
         }
         pthread_detach(th[i]);
