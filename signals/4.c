@@ -17,8 +17,8 @@ void sig_handle(int sig) {
 }
 
 int main(int argc, char *argv[]) {
-  int proc;
-  switch ((proc = fork())) {
+  pid_t pid;
+  switch ((pid = fork())) {
   case -1:
     perror("fork");
     exit(EXIT_FAILURE);
