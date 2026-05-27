@@ -27,6 +27,12 @@ int main(void) {
   print_sig(&newset);
   printf("sleeping...\n");
   sleep(5);
+  sigset_t pending;
+  if (sigpending(&pending) == -1) {
+    perror("sigpending");
+  }
+  print_sig(&pending);
+  sleep(2);
 
   printf("Next SIGQUIT will be removed mask..\n");
   sigdelset(&newset, SIGQUIT);
