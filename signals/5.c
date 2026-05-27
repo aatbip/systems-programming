@@ -9,7 +9,7 @@ int main(void) {
     perror("sigprocmask");
   }
 
-  for (int i = 0; i < NSIG; i++) {
+  for (int i = 1; i < NSIG; i++) {
     if (sigismember(&oldset, i)) {
       printf("%s\n", strsignal(i));
     }
