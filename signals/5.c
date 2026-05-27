@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 void print_sig(sigset_t *set) {
   for (int i = 1; i < NSIG; i++) {
@@ -17,16 +18,22 @@ int main(void) {
     perror("sigprocmask");
   }
 
-  sigaddset(&newset, 1);
-  sigaddset(&newset, 2);
-  sigaddset(&newset, 3);
-  sigaddset(&newset, 4);
+  sigaddset(&newset, SIGQUIT);
 
   if (sigprocmask(SIG_BLOCK, &newset, &oldset) == -1) {
     perror("sigprocmask");
   }
 
   print_sig(&newset);
+  printf("sleeping...\n");
+  sleep(5);
+
+  printf("Next SIGQUIT will be removed mask..\n");
+  if (sigprocmask(SIG_UNBLOCK, &newset, &oldset) == -1) {
+    perror("sigprocmask");
+  }
+  print_sig(&newset);
+  sleep(5);
 
   exit(EXIT_SUCCESS);
 }
