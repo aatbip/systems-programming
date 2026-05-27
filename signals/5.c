@@ -3,16 +3,18 @@
 #include <stdlib.h>
 #include <string.h>
 
-int main(void) {
-  sigset_t oldset;
-  if (sigprocmask(0, NULL, &oldset) == -1) {
-    perror("sigprocmask");
-  }
-
+void print_sig(sigset_t *set) {
   for (int i = 1; i < NSIG; i++) {
-    if (sigismember(&oldset, i)) {
+    if (sigismember(set, i)) {
       printf("%s\n", strsignal(i));
     }
+  }
+}
+
+int main(void) {
+  sigset_t oldset, newset;
+  if (sigprocmask(0, NULL, &oldset) == -1) {
+    perror("sigprocmask");
   }
 
   exit(EXIT_SUCCESS);
