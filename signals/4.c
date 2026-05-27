@@ -70,6 +70,13 @@ int main(int argc, char *argv[]) {
       perror("signal disposition");
       exit(EXIT_FAILURE);
     }
+
+    // struct sigaction act;
+    // act.sa_handler = sig_handle;
+    // if (sigaction(SIGTERM, &act, NULL) == -1) {
+    //   perror("sigaction");
+    // }
+
     /*Run child process forever until SIGTERM is received.*/
     for (;;)
       ;
