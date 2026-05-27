@@ -17,7 +17,7 @@ int main(void) {
   printf("pid: %d\n", getpid());
   struct sigaction act;
   act.sa_handler = handler;
-  // act.sa_flags = SA_NODEFER;
+  act.sa_flags = SA_NODEFER;
   if (sigaction(SIGTERM, &act, NULL) == -1) {
     perror("sigaction");
   }
