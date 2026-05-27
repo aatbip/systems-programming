@@ -28,6 +28,9 @@ int main(void) {
   printf("sleeping...\n");
   sleep(5);
   sigset_t pending;
+  // change disposition of SIGQUIT to SIG_IGN
+  // doing this should remove SIGQUIT from the pending signal list
+  signal(SIGQUIT, SIG_IGN);
   if (sigpending(&pending) == -1) {
     perror("sigpending");
   }
