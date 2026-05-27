@@ -14,6 +14,16 @@ typedef struct sig_handler_param {
 
 #define THREAD_CNT 4
 
+static volatile sig_atomic_t gotSigTerm = 0;
+
+void print_sig(sigset_t *set) {
+  for (int i = 1; i < NSIG; i++) {
+    if (sigismember(set, i)) {
+      printf("pending: sig %d %s\n", i, strsignal(i));
+    }
+  }
+}
+
 void *routine(void *p) {
   printf("Routine running...\n");
   sig_handler_param_t *param = (sig_handler_param_t *)p;
@@ -25,11 +35,19 @@ void *routine(void *p) {
 
 void sig_handle(int sig) {
   if (sig == SIGTERM) {
-    printf("%s triggered.\n", strsignal(sig));
+    sigset_t pending;
+    if (sigpending(&pending) == -1) {
+      perror("sigpending");
+      exit(EXIT_FAILURE);
+    }
+    print_sig(&pending);
+    gotSigTerm++;
+    printf("gotSigTerm: %d\n", gotSigTerm);
   }
   if (sig == SIGQUIT || sig == SIGCHLD) {
     printf("%s triggered.\n", strsignal(sig));
     printf("Exiting [pid] %d\n", getpid());
+    printf("total: %d\n", gotSigTerm);
     exit(EXIT_SUCCESS);
   }
 }
@@ -43,7 +61,7 @@ int main(int argc, char *argv[]) {
 
   // child process
   case 0:
-    printf("Child pid: %d\n", getpid());
+    printf("\nChild pid: %d\n", getpid());
 
     if (signal(SIGTERM, sig_handle) == SIG_ERR || signal(SIGQUIT, sig_handle) == SIG_ERR) {
       perror("signal disposition");
