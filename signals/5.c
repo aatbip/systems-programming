@@ -29,7 +29,8 @@ int main(void) {
   sleep(5);
 
   printf("Next SIGQUIT will be removed mask..\n");
-  if (sigprocmask(SIG_UNBLOCK, &newset, &oldset) == -1) {
+  sigdelset(&newset, SIGQUIT);
+  if (sigprocmask(SIG_SETMASK, &newset, &oldset) == -1) {
     perror("sigprocmask");
   }
   print_sig(&newset);
