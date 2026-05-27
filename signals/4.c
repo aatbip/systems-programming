@@ -19,13 +19,14 @@ static volatile sig_atomic_t gotSigTerm = 0;
 void print_sig(sigset_t *set) {
   for (int i = 1; i < NSIG; i++) {
     if (sigismember(set, i)) {
-      printf("pending: sig %d %s\n", i, strsignal(i));
+      // printf("pending: sig %d %s\n", i, strsignal(i));
+      write(STDOUT_FILENO, "pending\n", 8);
     }
   }
 }
 
 void *routine(void *p) {
-  printf("Routine running...\n");
+  // printf("Routine running...\n");
   sig_handler_param_t *param = (sig_handler_param_t *)p;
   if (kill(param->pid, param->sig) == -1) {
     perror("kill");
@@ -36,13 +37,15 @@ void *routine(void *p) {
 void sig_handle(int sig) {
   if (sig == SIGTERM) {
     sigset_t pending;
+    for (int i = 0; i < 999999999; i++)
+      ;
     if (sigpending(&pending) == -1) {
       perror("sigpending");
       exit(EXIT_FAILURE);
     }
     print_sig(&pending);
-    gotSigTerm++;
-    printf("gotSigTerm: %d\n", gotSigTerm);
+    // printf("gotSigTerm: %d\n", gotSigTerm++);
+    write(STDOUT_FILENO, "got\n", 4);
   }
   if (sig == SIGQUIT || sig == SIGCHLD) {
     printf("%s triggered.\n", strsignal(sig));
