@@ -6,10 +6,17 @@
 #include <string.h>
 
 #define MAX_ERROR_LEN 256
+pthread_once_t once = PTHREAD_ONCE_INIT;
+pthread_key_t key;
 
-static char buf[MAX_ERROR_LEN]; /* Statically allocated return buffer */
+void clean(void *buf) { free(buf); }
+
+void create_key(void) { pthread_key_create(&key, clean); }
 
 char *strerror1(int err) {
+  char *buf;
+  pthread_once(&once, create_key);
+
   if (err < 0) {
     snprintf(buf, MAX_ERROR_LEN, "Unknown error %d", err);
   } else {
