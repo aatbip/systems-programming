@@ -8,9 +8,18 @@
 #include <string.h>
 
 #define MAX_ERROR_LEN 256
+struct buf {
+  char *b;
+};
 
 char *strerror1(int err) {
-  static __thread char buf[MAX_ERROR_LEN];
+  static __thread struct buf *b = NULL;
+
+  if (!b) {
+    b = malloc(sizeof(struct buf));
+    b->b = malloc(MAX_ERROR_LEN);
+  }
+  char *buf = b->b;
 
   if (err < 0) {
     snprintf(buf, MAX_ERROR_LEN, "Unknown error %d", err);
