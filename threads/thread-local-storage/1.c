@@ -17,6 +17,12 @@ char *strerror1(int err) {
   char *buf;
   pthread_once(&once, create_key);
 
+  buf = pthread_getspecific(key);
+  if (!buf) {
+    buf = malloc(64); // 64 byte max buffer size
+    pthread_setspecific(key, buf);
+  }
+
   if (err < 0) {
     snprintf(buf, MAX_ERROR_LEN, "Unknown error %d", err);
   } else {
