@@ -1,3 +1,5 @@
+/*This program shows how to allocate thread specific data.*/
+
 #define _GNU_SOURCE
 #include <asm-generic/errno-base.h>
 #include <pthread.h>
