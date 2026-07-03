@@ -13,7 +13,10 @@ static pthread_key_t key;
 
 static void clean(void *buf) { free(buf); }
 
-static void create_key(void) { pthread_key_create(&key, clean); }
+static void create_key(void) {
+  printf("tid: %ld  key: %d\n", pthread_self(), key);
+  pthread_key_create(&key, clean);
+}
 
 char *strerror1(int err) {
   char *buf;
@@ -49,6 +52,7 @@ void *func(void *p) {
 }
 
 int main(void) {
+  printf("main tid: %ld\n", pthread_self());
   char *s;
   s = strerror1(EINVAL);
   printf("strerr called from main\n");
