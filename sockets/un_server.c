@@ -1,5 +1,6 @@
 #include <asm-generic/errno-base.h>
 #include <errno.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,6 +12,27 @@
 #define BACKLOG 5
 #define BUF_SIZE 100
 #define PATH "/tmp/sockunix"
+
+void *server_run(void *arg) {
+  int sfd = (int)(ptrdiff_t)arg;
+  int numread;
+  char buf[BUF_SIZE];
+  while (((numread = read(sfd, buf, BUF_SIZE)) > 0)) {
+    if (write(STDOUT_FILENO, buf, numread) != numread) {
+      printf("Partial or no write\n");
+    }
+  }
+  if (numread == -1) {
+    perror("read");
+    exit(EXIT_FAILURE);
+  }
+
+  if (close(sfd) == -1) {
+    perror("close");
+    exit(EXIT_FAILURE);
+  }
+  return NULL;
+}
 
 int main(void) {
   if (remove(PATH) == -1 && errno != ENOENT) {
@@ -39,8 +61,6 @@ int main(void) {
     exit(EXIT_FAILURE);
   }
 
-  int numread;
-  char buf[BUF_SIZE];
   for (;;) {
     int sfd = accept(fd, NULL, NULL);
     if (sfd == -1) {
@@ -48,20 +68,7 @@ int main(void) {
       exit(EXIT_FAILURE);
     }
 
-    while ((numread = read(sfd, buf, BUF_SIZE) > 0)) {
-      if (write(STDOUT_FILENO, buf, numread) != numread) {
-        printf("Partial or no write\n");
-      }
-    }
-
-    if (numread == -1) {
-      perror("read");
-      exit(EXIT_FAILURE);
-    }
-
-    if (close(sfd) == -1) {
-      perror("close");
-      exit(EXIT_FAILURE);
-    }
+    pthread_t th;
+    pthread_create(&th, NULL, server_run, (void *)(ptrdiff_t)sfd);
   }
 }

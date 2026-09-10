@@ -30,7 +30,7 @@ int main(void) {
   int numread;
   int buf[BUF_SIZE];
   while ((numread = read(STDIN_FILENO, buf, BUF_SIZE)) > 0) {
-    if (write(STDOUT_FILENO, buf, numread) != numread) {
+    if (write(fd, buf, numread) != numread) {
       printf("partial or no write\n");
     }
   }
