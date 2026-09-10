@@ -10,9 +10,9 @@
 
 #define BACKLOG 5
 #define BUF_SIZE 100
+#define PATH "/tmp/sockunix"
 
 int main(void) {
-  const char *PATH = "/tmp/sockunix";
   if (remove(PATH) == -1 && errno != ENOENT) {
     perror("remove");
     exit(EXIT_FAILURE);
@@ -27,7 +27,7 @@ int main(void) {
   struct sockaddr_un addr;
   memset(&addr, 0, sizeof(struct sockaddr_un));
   addr.sun_family = AF_UNIX;
-  strncpy(addr.sun_path, PATH, strlen(PATH) - 1);
+  strncpy(addr.sun_path, PATH, sizeof(addr.sun_path) - 1);
 
   if (bind(fd, (struct sockaddr *)&addr, sizeof(struct sockaddr_un)) == -1) {
     perror("bind");
