@@ -8,6 +8,9 @@
 #include <sys/un.h>
 #include <unistd.h>
 
+#define BACKLOG 5
+#define BUF_SIZE 100
+
 int main(void) {
   const char *PATH = "/tmp/sockunix";
   if (remove(PATH) == -1 && errno != ENOENT) {
@@ -29,5 +32,36 @@ int main(void) {
   if (bind(fd, (struct sockaddr *)&addr, sizeof(struct sockaddr_un)) == -1) {
     perror("bind");
     exit(EXIT_FAILURE);
+  }
+
+  if (listen(fd, BACKLOG) == -1) {
+    perror("listen");
+    exit(EXIT_FAILURE);
+  }
+
+  int numread;
+  char buf[BUF_SIZE];
+  for (;;) {
+    int sfd = accept(fd, NULL, NULL);
+    if (sfd == -1) {
+      perror("accept");
+      exit(EXIT_FAILURE);
+    }
+
+    while ((numread = read(sfd, buf, BUF_SIZE) > 0)) {
+      if (write(STDOUT_FILENO, buf, numread) != numread) {
+        printf("Partial or no write\n");
+      }
+    }
+
+    if (numread == -1) {
+      perror("read");
+      exit(EXIT_FAILURE);
+    }
+
+    if (close(sfd) == -1) {
+      perror("close");
+      exit(EXIT_FAILURE);
+    }
   }
 }
