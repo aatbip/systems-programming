@@ -47,5 +47,6 @@ int main(int argc, char **argv) {
 
     printf("received: %s\n", buf);
   }
+  remove(c_addr.sun_path);
   close(fd);
 }
