@@ -35,6 +35,8 @@ int main(void) {
     if (write(fd, buf, numread) != numread) {
       printf("partial or no write\n");
     }
+    read(fd, buf, BUF_SIZE);
+    write(STDOUT_FILENO, buf, numread);
   }
   if (numread == -1) {
     perror("read");

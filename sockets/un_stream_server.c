@@ -23,6 +23,9 @@ void *server_run(void *arg) {
     if (write(STDOUT_FILENO, buf, numread) != numread) {
       printf("Partial or no write\n");
     }
+    if (write(sfd, buf, numread) != numread) {
+      printf("Partial or no write\n");
+    }
   }
   if (numread == -1) {
     perror("read");
