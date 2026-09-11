@@ -8,7 +8,7 @@
 #define PATH "/tmp/dgram_server"
 #define BUF_SIZE 10
 
-int main(void) {
+int main(int argc, char **argv) {
   int fd = socket(AF_UNIX, SOCK_DGRAM, 0);
   if (fd == -1) {
     perror("socket");
@@ -31,13 +31,9 @@ int main(void) {
   strncpy(s_addr.sun_path, PATH, sizeof(s_addr.sun_path) - 1);
 
   char buf[BUF_SIZE];
-  for (;;) {
-    int numread;
-    if ((numread = read(STDIN_FILENO, buf, BUF_SIZE)) == -1) {
-      perror("read");
-      exit(EXIT_FAILURE);
-    }
-    if (sendto(fd, buf, numread, 0, (struct sockaddr *)&s_addr, (socklen_t)sizeof(struct sockaddr_un)) == -1) {
+
+  for (int i = 1; i < argc; i++) {
+    if (sendto(fd, buf, argc, 0, (struct sockaddr *)&s_addr, (socklen_t)sizeof(struct sockaddr_un)) == -1) {
       printf("Failed to send by client\n");
     }
 
