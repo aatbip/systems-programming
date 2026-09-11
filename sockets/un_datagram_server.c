@@ -6,6 +6,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/un.h>
+#include <unistd.h>
 
 #define PATH "/tmp/dgram_server"
 #define BUF_SIZE 1024
