@@ -1,3 +1,5 @@
+// Implementation of unix domain stream client socket
+
 #include <asm-generic/errno-base.h>
 #include <stdio.h>
 #include <stdlib.h>
