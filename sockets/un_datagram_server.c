@@ -8,7 +8,7 @@
 #include <sys/un.h>
 
 #define PATH "/tmp/dgram_server"
-#define BUF_SIZE 10
+#define BUF_SIZE 1024
 
 int main(void) {
   int fd = socket(AF_UNIX, SOCK_DGRAM, 0);
@@ -46,6 +46,8 @@ int main(void) {
     for (int i = 0; i < recvbyte; i++) {
       buf[i] = toupper((unsigned char)buf[i]);
     }
+
+    printf("Server received %d bytes from %s\n", recvbyte, c_addr.sun_path);
 
     if (sendto(fd, buf, recvbyte, 0, (struct sockaddr *)&c_addr, (socklen_t)len) < recvbyte) {
       printf("Failed to send from server\n");

@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 #define PATH "/tmp/dgram_server"
-#define BUF_SIZE 10
+#define BUF_SIZE 1024
 
 int main(int argc, char **argv) {
   int fd = socket(AF_UNIX, SOCK_DGRAM, 0);
@@ -33,7 +33,8 @@ int main(int argc, char **argv) {
   char buf[BUF_SIZE];
 
   for (int i = 1; i < argc; i++) {
-    if (sendto(fd, buf, argc, 0, (struct sockaddr *)&s_addr, (socklen_t)sizeof(struct sockaddr_un)) == -1) {
+    if (sendto(fd, argv[i], strlen(argv[i]), 0, (struct sockaddr *)&s_addr, (socklen_t)sizeof(struct sockaddr_un)) ==
+        -1) {
       printf("Failed to send by client\n");
     }
 
@@ -44,6 +45,7 @@ int main(int argc, char **argv) {
     }
     buf[recvbyte] = '\0';
 
-    printf("received: %s", buf);
+    printf("received: %s\n", buf);
   }
+  close(fd);
 }
