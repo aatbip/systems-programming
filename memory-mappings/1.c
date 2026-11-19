@@ -1,7 +1,9 @@
 // This program demonstrates the private file mapping using mmap syscall
 
 #include <fcntl.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -18,12 +20,16 @@ int main(void) {
     ERR;
   }
 
-  void *p = mmap(NULL, s.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
+  char *p = mmap(NULL, s.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
+  printf("size: %zu\n", strlen(p));
 
   if (p == MAP_FAILED)
     ERR;
 
   if (write(STDOUT_FILENO, p, s.st_size) != s.st_size)
+    ERR;
+
+  if (munmap(p, strlen(p)) == -1)
     ERR;
 
   exit(EXIT_SUCCESS);
