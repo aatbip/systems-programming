@@ -1,3 +1,5 @@
+// This program demonstrates the private file mapping using mmap syscall
+
 #include <fcntl.h>
 #include <stdlib.h>
 #include <sys/mman.h>
